@@ -21,7 +21,7 @@ To run it on your computer (macOS or Linux)
 - checkout the repository:
 
         git clone https://github.com/nghia71/paypal_mafia.git
-        cd feasible-path
+        cd paypal_mafia
 
 - create and run neo4j docker:
 

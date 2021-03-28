@@ -1,6 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-CALL apoc.load.xls('/paypal-mafia.xlsx', 'person!A1:E23')
+:param xlsx_file => 'https://github.com/nghia71/paypal_mafia/raw/main/import/paypal-mafia.xlsx';
+
+
+CALL apoc.load.xls($xlsx_file, 'person!A1:E23')
 	YIELD map
 WITH map
   MERGE (p:Person {name: map.name})
@@ -14,7 +17,7 @@ WITH map
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-CALL apoc.load.xls('/paypal-mafia.xlsx', 'person-education!A1:G29')
+CALL apoc.load.xls($xlsx_file, 'person-education!A1:G29')
   YIELD map
 WITH map
   MERGE (p:Person {name: map.name})
@@ -33,7 +36,7 @@ WITH map, p
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-CALL apoc.load.xls('/paypal-mafia.xlsx', 'company-company!A1:C17')
+CALL apoc.load.xls($xlsx_file, 'company-company!A1:C17')
   YIELD map
 WITH map
   MERGE (c:Company {name: map.name})
@@ -68,7 +71,7 @@ WITH map, p, c, title
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-CALL apoc.load.xls('/paypal-mafia.xlsx', 'innovation-company!A1:E69')
+CALL apoc.load.xls($xlsx_file, 'innovation-company!A1:E69')
   YIELD map
 WITH map
   MERGE (c:Company {name: map.company})
