@@ -29,21 +29,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-// STATE definitions
+// Unique constraints & Indexes
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-CREATE CONSTRAINT ON (n:CASE) ASSERT n.uid IS UNIQUE;
-CREATE CONSTRAINT ON (n:STATE) ASSERT n.uid IS UNIQUE;
-CREATE CONSTRAINT ON (n:ACTION) ASSERT n.uid IS UNIQUE;
-CREATE CONSTRAINT ON (n:BEGIN_STATE) ASSERT n.uid IS UNIQUE;
-CREATE CONSTRAINT ON (n:DECISION) ASSERT n.uid IS UNIQUE;
-CREATE CONSTRAINT ON (n:END_STATE) ASSERT n.uid IS UNIQUE;
-CREATE CONSTRAINT ON (n:INPUT) ASSERT n.uid IS UNIQUE;
-CREATE CONSTRAINT ON (n:PROCESS) ASSERT n.uid IS UNIQUE; 
-//
-CREATE CONSTRAINT ON (n:ACTOR) ASSERT n.uid IS UNIQUE; 
-CREATE CONSTRAINT ON (n:ITEM) ASSERT n.uid IS UNIQUE; 
+CREATE CONSTRAINT ON (n:Person) ASSERT n.name IS UNIQUE;
+CREATE CONSTRAINT ON (n:Company) ASSERT n.name IS UNIQUE;
+CREATE CONSTRAINT ON (n:University) ASSERT n.name IS UNIQUE;
+CREATE CONSTRAINT ON (n:Innovation) ASSERT n.name IS UNIQUE;
 //
 ////////////////////////////////////////////////////////////////////////////////
 

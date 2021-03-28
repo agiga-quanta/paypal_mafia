@@ -1,72 +1,83 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-CALL apoc.load.xls('/feasible-path.xlsx', '1!A1:D2')
+CALL apoc.load.xls('/paypal-mafia.xlsx', 'person!A1:E23')
 	YIELD map
 WITH map
-  MERGE (case:CASE {uid: map.identification})
+  MERGE (p:Person {name: map.name})
     SET
-      case.title = map.title,
-      case.category = map.category,
-      case.start_state = map.start_state
+      p.born = map.born,
+      p.country = map.country,
+      p.entry = map.entry,
+      p.worth = TOFLOAT(map.worth);
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-WITH case
-  CALL apoc.load.xls('/feasible-path.xlsx', '1!A4:L17')
-	  YIELD map
-WITH case, map
-  MERGE (state:STATE {uid: map.identification})
-WITH case, state, map  
-  CALL apoc.create.addLabels(state, [map.type]) YIELD node
-WITH case, state, map
+CALL apoc.load.xls('/paypal-mafia.xlsx', 'person-education!A1:G29')
+  YIELD map
+WITH map
+  MERGE (p:Person {name: map.name})
+WITH map, p
+  MERGE (u:University {name: map.university})
+    SET
+      u.country = map.country,
+      u.rank = map.rank
+  MERGE (p)-[r:STUDIED_AT]->(u)
+    SET
+      r.from = map.from,
+      r.to = map.to,
+      r.title = map.title;
+//
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//
+CALL apoc.load.xls('/paypal-mafia.xlsx', 'company-company!A1:C17')
+  YIELD map
+WITH map
+  MERGE (c:Company {name: map.name})
+  MERGE (o:Company {name: map.company})
+WITH map, c, o
+  CALL apoc.merge.relationship(c, TOUPPER(REPLACE(map.what, ' ', '_')), {}, {}, o, {}) YIELD rel
+RETURN COUNT(DISTINCT(map));
+//
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//
+CALL apoc.load.xls('/paypal-mafia.xlsx', 'person-company!A1:G103')
+  YIELD map
+WITH map
+  MERGE (p:Person {name: map.name})
+WITH map, p
+  MERGE (c:Company {name: map.company})
+    SET
+      c.description = map.description,
+      c.worth = ROUND(TOFLOAT(map.worth))
+WITH map, p, c, SPLIT(map.title, '|') AS title_list
+WITH map, p, c, title_list
+  UNWIND title_list AS title
+WITH map, p, c, title
+  CALL apoc.merge.relationship(p, TOUPPER(REPLACE(title, ' ', '_')), {}, {}, c, {}) YIELD rel
   SET
-    state.title = map.title,
-    state.date = DATE(map.date),
-    state.event = DATE(map.event)
-  FOREACH (a IN SPLIT(map.actors, '|') | 
-    MERGE (actor:ACTOR {uid: a + '-' + case.uid})
-      SET
-        actor.title = a
-    MERGE (state)-[:HAS_ACTOR]->(actor)
-  )
-  FOREACH (i IN SPLIT(map.input_items, '|') | 
-    MERGE (item:ITEM {uid: i + '-' + case.uid})
-      SET
-        item.title = i
-    MERGE (state)-[:HAS_INPUT]->(item)
-  )
-  FOREACH (o IN SPLIT(map.output_items, '|') | 
-    MERGE (item:ITEM {uid: o + '-' + case.uid})
-      SET
-        item.title = o
-    MERGE (state)-[:HAS_OUTPUT]->(item)
-  )
+    rel.from = map.from,
+    rel.to = map.to;
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-WITH case
-  CALL apoc.load.xls('/feasible-path.xlsx', '1!A4:L17')
-	  YIELD map
-WITH case, map
-  MERGE (start_state:STATE {uid: case.start_state})
-  MERGE (case)-[r:STARTS_WITH]->(start_state)
-WITH case, map
-  MERGE (start_state:STATE {uid: map.identification})
-  FOREACH (_ IN CASE WHEN map.route IS NOT NULL THEN [1] ELSE [] END |
-    MERGE (end_state:STATE {uid: map.route})
-    MERGE (start_state)-[r:NEXT]->(end_state)
-      SET
-        r.enabled = CASE map.route_completed = 'Y' WHEN TRUE THEN TRUE ELSE FALSE END
-  )
-  FOREACH (state_id IN SPLIT(map.alternate_routes, '|') | 
-    MERGE (end_state:STATE {uid: state_id})
-    MERGE (start_state)-[r:NEXT]->(end_state)
-      SET
-        r.enabled = CASE map.alternate_routes_completed = 'Y' WHEN TRUE THEN TRUE ELSE FALSE END
-  );
+CALL apoc.load.xls('/paypal-mafia.xlsx', 'innovation-company!A1:E69')
+  YIELD map
+WITH map
+  MERGE (c:Company {name: map.company})
+WITH map, c
+  MERGE (i:Innovation {name: map.name})
+  MERGE (c)-[r:MADE]->(i)
+    SET
+      r.when = map.when,
+      i.users = map.users,
+      i.type = map.type;
 //
 ////////////////////////////////////////////////////////////////////////////////

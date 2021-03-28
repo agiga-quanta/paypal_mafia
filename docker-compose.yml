@@ -44,7 +44,7 @@ services:
       - ./logs:/logs
       - ./plugins:/plugins
     environment:
-      - NEO4J_AUTH=neo4j/path
+      - NEO4J_AUTH=neo4j/ppmf
       - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
       - NEO4J_dbms_memory_heap_initial__size=2G
       - NEO4J_dbms_memory_heap_max__size=2G
