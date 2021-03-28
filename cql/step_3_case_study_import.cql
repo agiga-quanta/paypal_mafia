@@ -2,7 +2,6 @@
 //
 :param xlsx_file => 'https://github.com/nghia71/paypal_mafia/raw/main/import/paypal-mafia.xlsx';
 
-
 CALL apoc.load.xls($xlsx_file, 'person!A1:E23')
 	YIELD map
 WITH map
