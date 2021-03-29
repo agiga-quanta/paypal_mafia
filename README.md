@@ -49,8 +49,8 @@ Steve Chen, Chad Hurley, Jawed Karim accomplishment
     WITH p, c1
         OPTIONAL MATCH (c1)-[]-(i1:Innovation)
     WITH p, c1, i1
-        OPTIONAL MATCH (c1)-[]-(c2:Company)
+        OPTIONAL MATCH (c1)-[r]-(c2:Company)
             WHERE TYPE(r) <> 'OWNS'
     WITH p, c1, i1, c2
         OPTIONAL MATCH (c2)-[]-(i2:Innovation)
-    RETURN i1, i2
+    RETURN p, c1, c2, i1, i2
