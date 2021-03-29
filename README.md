@@ -4,6 +4,39 @@
 
 Here's a look into the mafia using network science (neo4j graph) [Presentation](doc/paypal_mafia.pdf).
 
+Paypal people
+
+![Paypal people](img/slide-3.png)
+
+Education
+
+![Years born](img/slide-4a.png)
+![Universities](img/slide-4b.png)
+
+PayPal as the financial operating system of the world
+
+![PayPal as the financial operating system of the world](img/slide-5.png)
+
+Peter Thiel
+
+![Peter Thiel](img/slide-6.png)
+
+Elon Musk
+
+![Elon Musk](img/slide-7.png)
+
+Steve Chen, Chad Hurley, Jawed Karim
+
+![Steve Chen, Chad Hurley, Jawed Karim](img/slide-8.png)
+
+All ventures
+
+![All ventures](img/slide-9.png)
+
+All achievements
+
+![All achievements](img/slide-10.png)
+
 ## How to set this up in the cloud
 
 *If you have only 5 mins and don't care if you want to keep it on your own machine*
